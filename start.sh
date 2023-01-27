@@ -7,6 +7,6 @@ tmux new-window -n AirSim 'source ~/setup.sh; sleep 3; cd ~/shared/launch; rosla
 tmux new-window -n Publisher 'source ~/setup.sh; sleep 6; python3 ~/shared/src/airsim_publisher.py; exec bash'
 tmux new-window -n Controller "source ~/setup.sh; sleep 9; python3 ~/shared/src/$2; exec bash"
 cd ..
-tmux new-window -n UnrealEngine "./run_docker.sh $1 $2"
+tmux new-window -n UnrealEngine "./run_docker.sh $1 $2; exec bash"
 tmux set-option -gw mouse on
 tmux attach-session -t Sim
