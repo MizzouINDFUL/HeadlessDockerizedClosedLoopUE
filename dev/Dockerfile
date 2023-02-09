@@ -169,4 +169,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 			xfonts-base \
 			xkb-data && \
 	rm -rf /var/lib/apt/lists/* && echo '' && echo 'RUN directive complete. Docker will now commit the filesystem layer to disk.' && echo 'Note that for large filesystem layers this can take quite some time.' && echo 'Performing filesystem layer commit...' && echo ''
+#Installing and setting up mono
+#This will let us run UnrealBuildTool.exe and comile C++ projects
+RUN	sudo apt-get update && \
+	apt-get install -y dirmngr && \
+	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
+	echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list && \
+	sudo apt update && \
+	sudo apt install -y mono-devel
+RUN	git clone https://github.com/Microsoft/AirSim.git && \
+	cd AirSim && \
+	./setup.sh && \
+	./build.sh
+RUN	mkdir -p ~/Documents/AirSim/
+COPY	monitor.py /home/ue4/UnrealEngine/Engine/Binaries/Linux
 USER ue4
+RUN 	mkdir -p ~/Documents/AirSim/
