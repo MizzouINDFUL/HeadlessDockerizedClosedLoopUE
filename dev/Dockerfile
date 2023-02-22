@@ -181,7 +181,10 @@ RUN	git clone https://github.com/Microsoft/AirSim.git && \
 	cd AirSim && \
 	./setup.sh && \
 	./build.sh
+COPY	PythonHelpers.uplugin /home/ue4/UnrealEngine/Engine/Plugins/PythonHelpers/
 RUN	mkdir -p ~/Documents/AirSim/
 COPY	monitor.py /home/ue4/UnrealEngine/Engine/Binaries/Linux
+COPY    PythonHelpers.uplugin /home/ue4/UnrealEngine/Engine/Plugins/PythonHelpers/
+
 USER ue4
 RUN 	mkdir -p ~/Documents/AirSim/

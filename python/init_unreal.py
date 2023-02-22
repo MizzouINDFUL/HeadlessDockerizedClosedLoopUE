@@ -21,6 +21,8 @@ def testRegistry(deltaTime):
             #unreal.log_warning(os.getcwd())
         
         if os.path.isfile("stop.txt"):
+            unreal.MindfulLib.stop_life()
+            unreal.SystemLibrary.execute_console_command(None,"py tweak_param.py")
             os.remove("stop.txt")
  
 print("starting unreal python contorller")

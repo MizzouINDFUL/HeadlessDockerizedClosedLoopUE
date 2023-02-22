@@ -1,7 +1,7 @@
 #!/bin/bash
 
 {
-        tmux kill-server
+        tmux kill-session -t Sim
 	docker stop unreal
 	docker rm unreal
         docker stop ros-master

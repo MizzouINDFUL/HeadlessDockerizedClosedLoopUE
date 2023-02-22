@@ -1,30 +1,53 @@
 #!/bin/bash
 
+eval $(./parse_yaml.sh settings.yml)
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 STARTDELAY=25
+MODULES=("Unreal")
 
-echo "Preparing Unreal, ROS, and AirSim"
+if [ $ros == true ]; then
+	# MODULES+=", ROS"
+	if [ $airsim == true ]; then
+		MODULES+=", ROS, and AirSim"
+	else
+		MODULES+=" and ROS"
+	fi
+elif [ $airsim == true ]; then
+	MODULES+=" and AirSim"
+fi
+
+echo "Preparing ${MODULES[@]}"
 echo "The session will start in $STARTDELAY seconds"
 {
-	tmux kill-server
+	tmux kill-session -t Sim
 	docker stop unreal
 	docker rm unreal
 	docker stop ros-master
 	docker rm ros-master
 	docker stop airsim-ros
 	docker rm airsim-ros
-	rm -rf $SCRIPTPATH/shared/*
+	rm -rf $SCRIPTPATH/shared/*.txt
 } &> /dev/null
 
-tmux new-session -d -s Sim -n UnrealEngine "./run_docker.sh $1 $2; exec bash";
+if [ $use_ue_docker == true ]; then
+	tmux new-session -d -s Sim -n UnrealEngine "./run_ue_docker.sh $project_path $include_mindful_lib $include_python_script $num_simulations; exec bash";
+else
+	tmux new-session -d -s Sim -n UnrealEngine "cd $custom_ue_path; ./UE4Editor-Cmd $project_path -game -RenderOffscreen; exec bash";
+fi
+
 sleep 3
-tmux new-window -n Monitor -t Sim:1 "docker exec -w /home/ue4/UnrealEngine/Engine/Binaries/Linux unreal python3 monitor.py; exec bash";
-sleep 5
-tmux new-window -t Sim:2 -n ROS './ros-master/run.sh; exec bash';
-#tmux new-window -t Sim:3 -n Monitor-Host 'python3 monitor_host.py; exec bash';
-cd $SCRIPTPATH/airsim-ros/
-sleep $STARTDELAY
-tmux new-window -t Sim:3 -n AirSim-Master './run_test_square.sh; exec bash';
+tmux new-window -n Monitor -t Sim:1 "docker exec -w /home/ue4/UnrealEngine/Engine/Binaries/Linux -u root:root unreal python3 monitor.py; exec bash";
+
+if [ $ros == true ]; then
+	sleep 5
+	tmux new-window -t Sim:2 -n ROS './ros-master/run.sh; exec bash';
+fi
+
+if [ $airsim == true ]; then
+	cd $SCRIPTPATH/airsim-ros/
+	sleep $STARTDELAY
+	tmux new-window -t Sim:3 -n AirSim-Master './run_test_square.sh; exec bash';
+fi
 tmux set-option -gw mouse on;
 tmux attach-session -t Sim
 

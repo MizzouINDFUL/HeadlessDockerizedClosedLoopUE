@@ -1,0 +1,12 @@
+---
+project_path: /home/mindful/Documents/Unreal\ Projects/Blocks/Blocks.uproject
+
+use_ue_docker: true
+custom_ue_path: /home/$USER/EpicGames/UE4.27/Engine/Binaries/Linux/
+
+airsim: true
+ros: true
+
+num_simulations: 1
+include_mindful_lib: false
+include_python_script: false

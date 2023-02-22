@@ -16,10 +16,10 @@ class PROJECT_API UMindfulLib : public UBlueprintFunctionLibrary
 	
 	public:
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="MINDFUL")
 	static float StartLife();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="MINDFUL")
 	static float StopLife();
 	
 	
