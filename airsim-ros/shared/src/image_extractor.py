@@ -48,7 +48,7 @@ else:
 os.chdir('/root/shared/src/rgb/')
 
 # Subscribe to the image topic
-image_sub = rospy.Subscriber('/bh_image', Image, image_callback)
+image_sub = rospy.Subscriber('/mindful_image', Image, image_callback)
 
 # Spin the ROS node to process incoming messages
 rospy.spin()

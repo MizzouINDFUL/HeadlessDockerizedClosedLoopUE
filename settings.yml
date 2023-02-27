@@ -7,7 +7,7 @@ custom_ue_path: /home/$USER/EpicGames/UE4.27/Engine/Binaries/Linux/
 airsim: true
 ros: true
 
-num_simulations: 5
-play_time: 45
+num_simulations: 3
+play_time: 60
 include_mindful_lib: true
 include_python_script: true

@@ -45,7 +45,7 @@ while True:
 
                 os.chdir(bag_folder+"/"+str(lives_played+1))
                 print("[" + getCurrentTime() + "]" + " Starting baggin info at " + bag_folder+"/"+str(lives_played+1))
-                os.system("tmux new-window -t Sim:4 -n ROS-Bags 'rosbag record -O ros.bag /bh_image /bh_depth /bh_info /bh_pose; exec bash';")
+                os.system("tmux new-window -t Sim:4 -n ROS-Bags 'rosbag record -O ros.bag /mindful_image /mindful_depth /mindful_info /mindful_pose; exec bash';")
                 print("[" + getCurrentTime() + "]" + " Started baggin info at " + bag_folder+"/"+str(lives_played+1))
                 os.chdir("../../..")
                 print("Now waiting for the game to start...")
@@ -61,17 +61,22 @@ while True:
 
                     #sending Ctrl+C to the ROS-Bags tmux window
                     os.system("tmux send-keys -t ROS-Bags C-c")
+                    time.sleep(0.5)
 
-                    os.system("docker exec -it /airsim-ros tmux kill-window -t Collector")
+                    #sending Ctrl+C to the Publisher tmux window inside airsim-ros container
+                    os.system("docker exec -it airsim-ros tmux send-keys -t Publisher C-c")
+                    time.sleep(0.75)
+                    #renaming the Publisher window to 'Extractor'
+                    os.system("docker exec -it airsim-ros tmux rename-window -t Publisher Extractor")
+                    #telling thge Extractor window to run image_extractor.py
+                    os.system("docker exec -it airsim-ros tmux send-keys -t Extractor 'python3 /root/shared/src/image_extractor.py; exec bash' ENTER")
                     
-                    #os.chdir(bag_folder+"/"+str(lives_played))
-                    #os.system("rosbag play ros.bag")
-                    #os.chdir("../../..")
+                    os.chdir(bag_folder+"/"+str(lives_played))
+                    os.system("rosbag play ros.bag")
+                    os.chdir("../../..")
 
-                    #move the rgb/ folder to the current bag folder
+                    #copy the contents of the temporary rgb/ folder to the current bag folder
                     os.system("cp -r ./airsim-ros/shared/src/rgb/ " + bag_folder+"/"+str(lives_played))
-                    #os.system("cp -r ./airsim-ros/shared/src/rgb/* " + bag_folder+"/"+str(lives_played)+"/rgb")
-                    #os.system("rm -r ./airsim-ros/shared/src/rgb")
                     os.system("tmux kill-window -t ROS-Bags")
                     os.system("tmux kill-window -t AirSim")
                     os.system("docker stop /airsim-ros")

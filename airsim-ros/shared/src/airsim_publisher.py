@@ -20,7 +20,7 @@ class AirSimPublisher():
         self.br = tf2_ros.TransformBroadcaster()
 
         queue_size = 1
-        topic = 'bh'
+        topic = 'mindful'
 
         self.pub_info = rospy.Publisher(f'{topic}_info', CameraInfo, queue_size=queue_size)
         self.pub_pose = rospy.Publisher(f'{topic}_pose', PoseStamped, queue_size=queue_size)
@@ -49,7 +49,7 @@ class AirSimPublisher():
             return
 
         tf.header.frame_id = "map"
-        tf.child_frame_id = "bh_camera"
+        tf.child_frame_id = "mindful_camera"
         self.br.sendTransform(tf)
 
         msg_pose = PoseStamped()
