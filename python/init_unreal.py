@@ -1,29 +1,45 @@
-import unreal 
+import unreal
 import os
+import socket
 import time
 
+is_playing = False
 tickhandle = None
- 
+
 def testRegistry(deltaTime):
-    
+
     asset_registry = unreal.AssetRegistryHelpers.get_asset_registry()
     if asset_registry.is_loading_assets():
         unreal.log_warning("still loading...")
     else:
-        if os.path.isfile("ready.txt"):
-            unreal.log_warning("ready!")
-            time.sleep(2)
+
+        #send the ready signal if playing.txt does not exist
+        if not os.path.exists("/shared/playing.txt"):
+            os.system("touch /shared/ready.txt")
+
+        if os.path.exists("/shared/play.txt") and not os.path.exists("/shared/playing.txt"):
+            # is_playing = True
+            #create file to signal that the editor is ready to play
+            os.system("touch /shared/playing.txt")
+
+            unreal.log_warning("Starting PIE session...")
             unreal.MindfulLib.start_life()
-            unreal.log_warning("startingPIE")
-            os.remove("ready.txt")
-        else:
-            return
-            #unreal.log_warning(os.getcwd())
-        
-        if os.path.isfile("stop.txt"):
+        if os.path.exists("/shared/stop.txt"):
+            # is_playing = False
+            #deleting "playing.txt" file to signal that the editor is not playing anymore
+            if os.path.exists("/shared/playing.txt"):
+                os.remove("/shared/playing.txt")
+            if os.path.exists("/shared/stop.txt"):
+                os.remove("/shared/stop.txt")
+            #if os.path.exists("/shared/play.txt"):
+                #os.remove("/shared/play.txt")
+            if os.path.exists("/shared/ready.txt"):
+                os.remove("/shared/ready.txt")
+
+            unreal.log_warning("Life ended. Stopping PIE session...")
             unreal.MindfulLib.stop_life()
-            unreal.SystemLibrary.execute_console_command(None,"py tweak_param.py")
-            os.remove("stop.txt")
- 
+            #unreal.SystemLibrary.execute_console_command(None,"py tweak_param.py")
+
 print("starting unreal python contorller")
+
 tickhandle = unreal.register_slate_pre_tick_callback(testRegistry)

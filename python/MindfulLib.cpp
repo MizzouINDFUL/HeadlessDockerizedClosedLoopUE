@@ -10,47 +10,21 @@
 #include "UnrealEdGlobals.h"
 #include "Editor/UnrealEd/Public/Editor.h"
 
-
+//Stop the Unreal Play In Editor session
 float UMindfulLib::StopLife(){
-
-    if(GEditor){
-        UWorld* World = GEditor->GetEditorWorldContext().World();
-        if(World){
-            GEditor->Exec( World, TEXT( "QUIT_EDITOR" ) );
-        }
-    }
-
+    GUnrealEd->RequestEndPlayMap();
     return -1.0;
 }
 
 float UMindfulLib::StartLife(){
-    // if(GEditor){
-    //     UWorld* World = GEditor->GetEditorWorldContext().World();
-    //     if(World){
-    //         GEditor->
-    //     }
-    // }
-
-    //FLevelEditorModule& LevelEditorModule = FModuleManager::Get().GetModuleChecked<FLevelEditorModule>(TEXT("LevelEditor"));
-
-
-
-    //ULevelEditorPlaySettings* playSettings =  GetMutableDefault<ULevelEditorPlaySettings>();
-
-    //playSettings->SetPlayNumberOfClients(1);
-
-    //playSettings->SetPlayNetMode(EPlayNetMode::PIE_Standalone);
-
-
 
     FRequestPlaySessionParams sessionParameters;
 
-    //sessionParameters.DestinationSlateViewport = LevelEditorModule.GetFirstActiveViewport();//sets the server viewport in there. Otherwise, a window is created for the server.
-
-    //sessionParameters.EditorPlaySettings = playSettings;	
-
     GUnrealEd->RequestPlaySession(sessionParameters);
-    //UE_LOG(LogTemp, Error, TEXT("%s"), *FString("c++ function"))
+
+    //Start Unreal Play In Editor session in the current viewport
+    //sessionParameters.ViewportType = ELevelViewportType::LVT_Perspective;
+
     return 1.0;
 }
 

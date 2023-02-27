@@ -17,7 +17,7 @@ elif [ $airsim == true ]; then
 fi
 
 echo "Preparing ${MODULES[@]}"
-echo "The session will start in $STARTDELAY seconds"
+echo "A new tmux session will be created with the name 'Sim' in about 10 seconds."
 {
 	tmux kill-session -t Sim
 	docker stop unreal
@@ -35,19 +35,19 @@ else
 	tmux new-session -d -s Sim -n UnrealEngine "cd $custom_ue_path; ./UE4Editor-Cmd $project_path -game -RenderOffscreen; exec bash";
 fi
 
-sleep 3
-tmux new-window -n Monitor -t Sim:1 "docker exec -w /home/ue4/UnrealEngine/Engine/Binaries/Linux -u root:root unreal python3 monitor.py; exec bash";
+# tmux new-window -n Monitor -t Sim:1 "docker exec -w /home/ue4/UnrealEngine/Engine/Binaries/Linux -u root:root unreal python3 monitor.py; exec bash";
+tmux new-window -n Monitor -t Sim:1 "python3 monitor_v2.py; exec bash";
 
 if [ $ros == true ]; then
-	sleep 5
+	sleep 2
 	tmux new-window -t Sim:2 -n ROS './ros-master/run.sh; exec bash';
 fi
 
-if [ $airsim == true ]; then
-	cd $SCRIPTPATH/airsim-ros/
-	sleep $STARTDELAY
-	tmux new-window -t Sim:3 -n AirSim-Master './run_test_square.sh; exec bash';
-fi
+# if [ $airsim == true ]; then
+# 	cd $SCRIPTPATH/airsim-ros/
+# 	sleep $STARTDELAY
+# 	tmux new-window -t Sim:3 -n AirSim-Master './run_test_square.sh; exec bash';
+# fi
 tmux set-option -gw mouse on;
 tmux attach-session -t Sim
 
