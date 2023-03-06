@@ -30,7 +30,7 @@ echo "A new tmux session will be created with the name 'Sim' in about 10 seconds
 } &> /dev/null
 
 if [ $use_ue_docker == true ]; then
-	tmux new-session -d -s Sim -n UnrealEngine "./run_ue_docker.sh $project_path $include_mindful_lib $include_python_script $num_simulations; exec bash";
+	tmux new-session -d -s Sim -n UnrealEngine "./run_ue_docker.sh $project_path $include_mindful_lib $include_python_script $num_simulations $editor_modifier_script; exec bash";
 else
 	tmux new-session -d -s Sim -n UnrealEngine "cd $custom_ue_path; ./UE4Editor-Cmd $project_path -game -RenderOffscreen; exec bash";
 fi

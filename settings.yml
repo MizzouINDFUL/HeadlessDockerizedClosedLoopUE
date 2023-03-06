@@ -7,7 +7,14 @@ custom_ue_path: /home/$USER/EpicGames/UE4.27/Engine/Binaries/Linux/
 airsim: true
 ros: true
 
+#dictionary of topics to subscribe to and their respective types
+topics: {"/mindful_image": "Image", "/mindful_depth": "Image", "/mindful_info": "CameraInfo", "/mindful_pose": "PoseStamped"}
+topic-folder: {"/mindful_image": "rgb", "/mindful_depth": "depth", "/mindful_info": ".", "/mindful_pose": "."}
+topic-json: {"/mindful_info": "camera.json", "/mindful_pose": "cameraPosition.json"}
+
 num_simulations: 3
-play_time: 60
+play_time: 45
 include_mindful_lib: true
 include_python_script: true
+
+editor_modifier_script: /home/$USER/HeadlessDockerizedClosedLoopUE/Python/scale_cars.py

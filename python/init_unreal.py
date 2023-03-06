@@ -16,6 +16,7 @@ def testRegistry(deltaTime):
         #send the ready signal if playing.txt does not exist
         if not os.path.exists("/shared/playing.txt"):
             os.system("touch /shared/ready.txt")
+            unreal.SystemLibrary.execute_console_command(None,"py MODIFIERSCRIPTNAME")
 
         if os.path.exists("/shared/play.txt") and not os.path.exists("/shared/playing.txt"):
             # is_playing = True
@@ -38,8 +39,12 @@ def testRegistry(deltaTime):
 
             unreal.log_warning("Life ended. Stopping PIE session...")
             unreal.MindfulLib.stop_life()
+
+            #executing the python script to modify the parameters
+            unreal.SystemLibrary.execute_console_command(None,"py " + modifier_script)
             #unreal.SystemLibrary.execute_console_command(None,"py tweak_param.py")
 
 print("starting unreal python contorller")
 
 tickhandle = unreal.register_slate_pre_tick_callback(testRegistry)
+

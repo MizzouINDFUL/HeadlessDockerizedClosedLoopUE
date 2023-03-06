@@ -26,10 +26,14 @@ class AirSimPublisher():
         self.pub_pose = rospy.Publisher(f'{topic}_pose', PoseStamped, queue_size=queue_size)
         self.pub_image = rospy.Publisher(f'{topic}_image', Image, queue_size=queue_size)
         self.pub_depth = rospy.Publisher(f'{topic}_depth', Image, queue_size=queue_size)
+        # self.pub_id = rospy.Publisher(f'{topic}_id', Image, queue_size=queue_size)
 
         self.sub_image = message_filters.Subscriber('/airsim_node/drone_1/front/Scene', Image)
         self.sub_depth = message_filters.Subscriber('/airsim_node/drone_1/front/DepthPlanar', Image)
         self.sub_info = message_filters.Subscriber('/airsim_node/drone_1/front/Scene/camera_info', CameraInfo)
+
+        #Subscribe to Segementation Image
+        # self.sub_id = message_filters.Subscriber('/airsim_node/drone_1/front/Segmentation', Image)
         
         self.sub_synced = message_filters.ApproximateTimeSynchronizer([self.sub_image, self.sub_depth, self.sub_info], 1, slop=0.05)
         self.sub_synced.registerCallback(self.callback)
@@ -66,6 +70,8 @@ class AirSimPublisher():
 
         msg_image.header.stamp = timestamp
         msg_depth.header.stamp = timestamp
+        # msg_id.header.stamp = timestamp
+        # self.pub_id.publish(msg_id)
         self.pub_image.publish(msg_image)
         self.pub_depth.publish(msg_depth)
 
