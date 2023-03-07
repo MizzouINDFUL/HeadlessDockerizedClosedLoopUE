@@ -78,6 +78,11 @@ cd ..
 cd ros-master
 ./build.sh
 cd ..
+
+#Making sure that the ROS container will have its own network
+docker inspect ros >/dev/null 2>&1 || \
+docker network create --driver bridge ros 
+
 #Build AirSim Docker image
 cd airsim-ros
 ./build.sh
