@@ -8,7 +8,7 @@ This will run your Unreal project with AirSim plugin in it multiple times, bag t
 + A machine that is capable of running Unreal Engine and has all the drivers installed for it
 
 ### Your Unreal Engine project must
-+ have AirSim plugin installed
++ have AirSim plugin
 + be a c++ project
 
 ## Building
