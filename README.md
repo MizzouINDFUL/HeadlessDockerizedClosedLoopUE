@@ -5,7 +5,7 @@ This will run your Unreal project with AirSim plugin in it multiple times, bag t
 + **Ubuntu 20.04** seemed to be the most stable for this project so far
 + **[Docker](https://docs.docker.com/engine/install/ubuntu/)** 
 + **[Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)**
-+ A machine that is capable of running Unrael Engine and has all the drivers installed for it
++ A machine that is capable of running Unreal Engine and has all the drivers installed for it
 
 ### Your Unreal Engine project must
 + have AirSim plugin installed
