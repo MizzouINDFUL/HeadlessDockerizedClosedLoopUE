@@ -1,41 +1,25 @@
-# HeadlessDockerizedClosedLoopUE
+# Headless Dockerized Closed Loop UE
+This will run your Unreal project with AirSim plugin in it multiple times, bag the ROS topics, and then store all that data for each simulation
 
-Prerquisites: 
+### Prerequisites
++ **Ubuntu 20.04** seemed to be the most stable for this project so far
++ **[Docker](https://docs.docker.com/engine/install/ubuntu/)** 
++ **[Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)**
++ A machine that is capable of running Unrael Engine and has all the drivers installed for it
 
- 
+### Your Unreal Engine project must
++ have AirSim plugin installed
++ be a c++ project
 
-    I was testing this out on a Ubuntu 20.04 machine 
+## Building
+1. Enter you GitHub username in username.txt. Be sure that your account has access to Unreal Engine's repo
+2. Enter yout GitHub token. To get your token, go to Settings->Developer settings->Personal access tokens->Tokens(classic)
+3. Run ./build.sh
 
-    Docker - https://docs.docker.com/engine/install/ubuntu/ 
+### Known issues when building
+Sometimes you may get a "Docker permission denied" error. A fix to that is described [here](https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue). Note that you might have to restart your machine to apply the fix.
 
-    Your Unreal project must have AirSim plugin in it 
-
-    As of right now, we need the Unreal projects to be stored in the ~Documents/Unreal Projects directory. The name of the folder that contains the project must have the title of the that same project. For example, if your .uproject file is called Blocks.uproject, full path should be /home/username/Documents/Unreal Projects/Blocks/Blocks 
-
-    You must provide the python script that will take the role of the controller during the simulation. The repo comes with a sample script called waypoint_lawnmower.py in the airsim-ros/shared/src/ directory. Your custom script should be located in the same directory 
-     
-
- 
-
-Building containers: 
-
-    Open username.txt and paste your github username 
-
-    Open password.txt and paste your github token (NOT password). Make sure the github account you're using has access to Epic's official Unreal Engine repo 
-
-    Open terminal and navigate to the Unreal Container project folder 
-
-    Run ./build.sh* 
-    *In case you get a "Docker permission denied" error: 
-
-    https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue 
-
-    Note that you may need to restart your machine for it to fix the problem 
-
- 
-
-Running the simulation: 
-
-  run ./start.sh from repo's root directory. Provide to arguments:  
-
-  Project name and the name of the python script that will be the "Controller" in your simulation.  
+## Running
+1. Provide the path to your project in *project_path* in settings.yml file
+2. You may want to tweak any other parameters. For example if you just want to run Unreal externally from your machine, you may set *use_ue_docker* to false and provide path to your engine folder in *custom_ue_path*
+3. Run ./start.sh
