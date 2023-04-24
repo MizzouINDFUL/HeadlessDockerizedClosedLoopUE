@@ -1,6 +1,6 @@
 #!/bin/bash
 
-eval $(./parse_yaml.sh settings.yml)
+eval $(./python/parse_yaml.sh settings.yml)
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 STARTDELAY=25
 MODULES=("Unreal")
@@ -36,18 +36,13 @@ else
 fi
 
 # tmux new-window -n Monitor -t Sim:1 "docker exec -w /home/ue4/UnrealEngine/Engine/Binaries/Linux -u root:root unreal python3 monitor.py; exec bash";
-tmux new-window -n Monitor -t Sim:1 "python3 monitor_v2.py; exec bash";
+tmux new-window -n Orchestrator -t Sim:1 "python3 orchestrator.py $airsim_agent; exec bash";
 
 if [ $ros == true ]; then
 	sleep 2
 	tmux new-window -t Sim:2 -n ROS './ros-master/run.sh; exec bash';
 fi
 
-# if [ $airsim == true ]; then
-# 	cd $SCRIPTPATH/airsim-ros/
-# 	sleep $STARTDELAY
-# 	tmux new-window -t Sim:3 -n AirSim-Master './run_test_square.sh; exec bash';
-# fi
 tmux set-option -gw mouse on;
 tmux attach-session -t Sim
 

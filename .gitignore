@@ -1,0 +1,5 @@
+bags/*
+airsim-ros/shared/src/rgb
+airsim-ros/shared/src/depth
+airsim-ros/shared/src/*.txt
+airsim-ros/shared/src/*.json

@@ -8,7 +8,17 @@ RUN . /opt/ros/noetic/setup.sh && \
     ./setup.sh && \
     ./build.sh && \
     cd ros && \
-    catkin build
+    catkin build && \
+	pip install opencv-python && \
+	pip install msgpack-rpc-python && \
+	pip install airsim
+
+RUN cd /root/ && \
+	git clone https://github.com/pjreddie/darknet && \
+	cd darknet && \
+	make && \
+	wget https://pjreddie.com/media/files/yolov3.weights
+	
 
 # Create a setup script
 ADD setup.sh /root/setup.sh
